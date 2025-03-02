@@ -14,16 +14,14 @@ class Migration(migrations.Migration):
 
         User = get_user_model()
 
-        if User.objects.exists():
-            return
-        
-        superuser = User.objects.create_superuser(
-            username="example_username",
-            email="example@example.com",
-            password="example_password",
-            last_login=timezone.now()
-        )
-        superuser.save()
+        if not User.objects.filter(is_superuser=True).exists():
+            superuser = User.objects.create_superuser(
+                username="example_username",
+                email="example@example.com",
+                password="example_password",
+                last_login=timezone.now()
+            )
+            superuser.save()
 
     operations = [
         migrations.RunPython(create_superuser)
